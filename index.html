@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SG – ML & GenAI projects</title>
+<meta name="description" content="Final-year Computer Science student building machine learning and GenAI projects.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F2F5FA; --surface:#FFFFFF; --ink:#13203A; --muted:#55627D;
+  --line:#D5DCE9; --accent:#2B45E8; --accent-ink:#FFFFFF;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F1626; --surface:#17203A; --ink:#E8EDF8; --muted:#9AA7C4;
+    --line:#2A3556; --accent:#7F93FF; --accent-ink:#0F1626; color-scheme:dark;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.6 "IBM Plex Sans",system-ui,sans-serif;
+  padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}
+.wrap{max-width:860px;margin:0 auto;padding:0 24px}
+h1,h2,h3{font-family:"Bricolage Grotesque",system-ui,sans-serif;line-height:1.1;margin:0}
+a{color:var(--accent)}
+a:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:4px}
+
+.hero{padding:88px 0 56px}
+.hero h1{font-size:clamp(2.6rem,8vw,5rem);font-weight:700;letter-spacing:-.03em;max-width:14ch}
+.hero p{font-size:1.15rem;color:var(--muted);max-width:56ch;margin:24px 0 32px}
+.links{display:flex;flex-wrap:wrap;gap:12px}
+.btn{display:inline-block;padding:11px 20px;border-radius:8px;text-decoration:none;font-weight:500;
+  border:1.5px solid var(--ink);color:var(--ink)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn:hover{border-color:var(--accent)}
+
+section{padding:40px 0;border-top:1px solid var(--line)}
+section>.wrap>h2{font-size:1.7rem;margin-bottom:6px}
+.sub{color:var(--muted);margin:0 0 24px}
+
+.repo{display:grid;grid-template-columns:1fr auto;gap:4px 24px;padding:18px 0;border-bottom:1px solid var(--line)}
+.repo:first-of-type{border-top:1px solid var(--line)}
+.repo h3{font-size:1.2rem}
+.repo h3 a{color:var(--ink);text-decoration:none}
+.repo h3 a:hover{color:var(--accent);text-decoration:underline}
+.repo p{grid-column:1;margin:0;color:var(--muted);max-width:60ch}
+.meta{grid-column:2;grid-row:1/span 2;text-align:right;color:var(--muted);font-size:.9rem;align-self:center}
+.lang{display:inline-flex;align-items:center;gap:6px}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--accent)}
+.status{color:var(--muted);padding:12px 0}
+
+.xp{display:grid;grid-template-columns:200px 1fr;gap:6px 24px;padding:16px 0;border-bottom:1px solid var(--line)}
+.xp h3{font-size:1.05rem}
+.xp p{margin:0;color:var(--muted)}
+.skills{display:flex;flex-wrap:wrap;gap:8px;padding:0;margin:0;list-style:none}
+.skills li{padding:5px 12px;border:1px solid var(--line);border-radius:999px;background:var(--surface);font-size:.95rem}
+
+footer{padding:40px 0 56px;color:var(--muted);font-size:.95rem}
+
+@media (max-width:620px){
+  .hero{padding-top:56px}
+  .repo{grid-template-columns:1fr}
+  .meta{grid-column:1;grid-row:auto;text-align:left}
+  .xp{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<header class="hero"><div class="wrap">
+  <h1 id="name">SG builds ML and GenAI projects.</h1>
+  <p id="bio"></p>
+  <div class="links" id="links"></div>
+</div></header>
+
+<section><div class="wrap">
+  <h2>Projects</h2>
+  <p class="sub">Pulled live from my GitHub, so this list stays current.</p>
+  <div id="repos"><p class="status">Loading repositories…</p></div>
+</div></section>
+
+<section><div class="wrap">
+  <h2>Experience</h2>
+  <p class="sub">Internships and training alongside my degree.</p>
+  <div id="xp"></div>
+</div></section>
+
+<section><div class="wrap">
+  <h2>Skills</h2>
+  <p class="sub">Tools I use in my projects.</p>
+  <ul class="skills" id="skills"></ul>
+</div></section>
+
+<footer><div class="wrap"><span id="foot"></span></div></footer>
+
+<script>
+/* ===== EDIT ONLY THIS BLOCK ===== */
+const CONFIG = {
+  username: "YOUR_GITHUB_USERNAME",
+  displayName: "SG",
+  headline: "SG builds ML and GenAI projects.",
+  bio: "Final-year B.Tech student in Computer Science & Engineering (Data Science), based in Guwahati. I’m looking for a fresher role where I can ship ML and GenAI work.",
+  email: "you@example.com",
+  linkedin: "https://www.linkedin.com/in/YOUR_HANDLE",
+  resume: "",                       // e.g. "resume.pdf" (upload it to the same repo), or leave empty
+  featured: [],                     // repo names to show first, e.g. ["sgas", "my-rag-bot"]
+  maxRepos: 6,
+  experience: [
+    { role: "Compliance intern", org: "PwC", note: "Worked on compliance-focused tasks in a professional services setting." },
+    { role: "IoT and embedded systems training", org: "STPI Guwahati", note: "Hands-on training in IoT and embedded systems." }
+  ],
+  skills: ["Python", "Machine learning", "Generative AI", "Data science", "IoT / embedded", "Git", "Canva design"]
+};
+/* ================================ */
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const C = CONFIG;
+
+document.title = C.displayName + " – ML & GenAI projects";
+$("name").textContent = C.headline;
+$("bio").textContent = C.bio;
+$("foot").textContent = "© " + new Date().getFullYear() + " " + C.displayName;
+
+const links = [
+  { t: "View GitHub", h: "https://github.com/" + C.username, p: true },
+  { t: "LinkedIn", h: C.linkedin },
+  { t: "Email me", h: "mailto:" + C.email }
+];
+if (C.resume) links.push({ t: "Resume", h: C.resume });
+$("links").innerHTML = links.map(l =>
+  `<a class="btn${l.p ? " primary" : ""}" href="${esc(l.h)}">${esc(l.t)}</a>`).join("");
+
+$("xp").innerHTML = C.experience.map(x =>
+  `<div class="xp"><div><h3>${esc(x.role)}</h3><div class="sub" style="margin:0">${esc(x.org)}</div></div><p>${esc(x.note)}</p></div>`).join("");
+$("skills").innerHTML = C.skills.map(s => `<li>${esc(s)}</li>`).join("");
+
+const ago = d => {
+  const days = Math.floor((Date.now() - new Date(d)) / 864e5);
+  if (days < 1) return "today";
+  if (days < 31) return days + " days ago";
+  if (days < 365) return Math.floor(days / 30) + " months ago";
+  return Math.floor(days / 365) + " years ago";
+};
+
+async function loadRepos() {
+  const box = $("repos");
+  try {
+    const r = await fetch(`https://api.github.com/users/${encodeURIComponent(C.username)}/repos?per_page=100&sort=pushed`);
+    if (!r.ok) throw new Error(r.status);
+    let repos = (await r.json()).filter(x => !x.fork && !x.archived && x.name.toLowerCase() !== (C.username + ".github.io").toLowerCase());
+    const rank = x => {
+      const i = C.featured.findIndex(f => f.toLowerCase() === x.name.toLowerCase());
+      return i === -1 ? 1000 : i;
+    };
+    repos.sort((a, b) => rank(a) - rank(b) || b.stargazers_count - a.stargazers_count || new Date(b.pushed_at) - new Date(a.pushed_at));
+    repos = repos.slice(0, C.maxRepos);
+    if (!repos.length) { box.innerHTML = `<p class="status">No public repositories yet.</p>`; return; }
+    box.innerHTML = repos.map(x => `
+      <article class="repo">
+        <h3><a href="${esc(x.html_url)}">${esc(x.name)}</a></h3>
+        <p>${esc(x.description || "No description yet. Add one in the repository settings.")}</p>
+        <div class="meta">
+          ${x.language ? `<span class="lang"><span class="dot"></span>${esc(x.language)}</span><br>` : ""}
+          ${x.stargazers_count ? x.stargazers_count + " stars · " : ""}Updated ${ago(x.pushed_at)}
+        </div>
+      </article>`).join("");
+  } catch (e) {
+    box.innerHTML = `<p class="status">Couldn’t load repositories. Check that <code>username</code> in the config is correct, or <a href="https://github.com/${esc(C.username)}">open my GitHub</a> directly.</p>`;
+  }
+}
+loadRepos();
+</script>
+</body>
+</html>
